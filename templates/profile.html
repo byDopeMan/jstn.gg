@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.display_name }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Video Preview Overlay -->
+    <div id="videoPreview" class="video-preview">
+        <div class="preview-content">
+            <h1 class="preview-title">learning developer</h1>
+            <div class="play-button" onclick="startExperience()">
+                <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+                <span>Click to Enter</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Video -->
+    <video id="backgroundVideo" autoplay muted loop playsinline class="background-video">
+        <source src="{{ url_for('static', filename='background.mp4') }}" type="video/mp4">
+    </video>
+    
+    <!-- Background Overlay -->
+    <div class="background-overlay"></div>
+
+    <!-- Stats in Top Right -->
+    <div class="stats">
+        <div class="stat-item">
+            <svg class="stat-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <span>{{ user.views }}</span>
+        </div>
+        <div class="stat-item">
+            <svg class="stat-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+            </svg>
+            <span>1149</span>
+        </div>
+    </div>
+
+    <!-- Main Profile Container -->
+    <div class="profile-container">
+        <!-- Profile Card -->
+        <div class="profile-card">
+            <!-- Avatar -->
+            <div class="avatar-container">
+                <img src="{{ url_for('static', filename='pfp.png') }}" alt="Avatar" class="avatar">
+            </div>
+            
+            <!-- Name -->
+            <h1 class="display-name">{{ user.display_name }}</h1>
+            
+            <!-- User-State -->
+            <div class="user-state">{{ user.custom_status }}</div>
+            
+            <!-- Location -->
+            <div class="location">
+                <svg class="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                <span>{{ user.location }}</span>
+            </div>
+            
+            <!-- GitHub Icon -->
+            <div class="github-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+            </div>
+        </div>
+        
+        <!-- Discord Status Card -->
+        <div class="discord-card">
+            <div class="discord-content">
+                <div class="discord-avatar-container">
+                    <img src="{{ user.avatar_url }}" alt="Discord Avatar" class="discord-avatar">
+                    <div class="status-indicator {{ user.status }}"></div>
+                </div>
+                <div class="discord-info">
+                    <div class="discord-name-line">
+                        <span class="discord-name">{{ user.username }}</span>
+                        <div class="discord-badges">
+                            <div class="badge verified"></div>
+                            <div class="badge premium"></div>
+                            <div class="badge bot"></div>
+                        </div>
+                    </div>
+                    {% if user.activity != "No activity" %}
+                    <div class="discord-activity">
+                        <div class="activity-dot"></div>
+                        <span>{{ user.activity }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <button class="action-button">
+                <svg class="button-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.5 12a1.5 1.5 0 01-1.5-1.5A1.5 1.5 0 0117.5 9a1.5 1.5 0 011.5 1.5 1.5 1.5 0 01-1.5 1.5m-3-4A1.5 1.5 0 0113 6.5 1.5 1.5 0 0114.5 5 1.5 1.5 0 0116 6.5 1.5 1.5 0 0114.5 8m-5 0A1.5 1.5 0 018 6.5 1.5 1.5 0 019.5 5 1.5 1.5 0 0111 6.5 1.5 1.5 0 019.5 8m-3 4A1.5 1.5 0 015 10.5 1.5 1.5 0 016.5 9 1.5 1.5 0 018 10.5 1.5 1.5 0 016.5 12M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <span>Made by {{ user.username }}</span>
+    </div>
+
+    <script>
+        function startExperience() {
+            const preview = document.getElementById('videoPreview');
+            const video = document.getElementById('backgroundVideo');
+
+            if (video) {
+                video.volume = 0.25; // 25% volume
+            }
+            
+            // Fade out preview
+            preview.style.opacity = '0';
+            preview.style.pointerEvents = 'none';
+            
+            // Remove blur from video
+            video.classList.add('unblurred');
+            
+            // Unmute and play video with sound
+            video.muted = false;
+            video.play().catch(e => console.log('Video play failed:', e));
+            
+            // Remove preview after animation
+            setTimeout(() => {
+                preview.style.display = 'none';
+            }, 800);
+        }
+    </script>
+</body>
+</html>
