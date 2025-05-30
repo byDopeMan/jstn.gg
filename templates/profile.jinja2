@@ -205,9 +205,9 @@
         <span>Made with ❤️ by {{ user.username }}</span>
     </div>
 
-    <script src="/static/script.js"></script>
+    <script src="/static/main.js"></script>
+    <script src="/static/ea.js"></script>
     <script>
-        // Template-Daten an JavaScript übergeben
         {% if user.listening_to_spotify and user.spotify and user.spotify.timestamps %}
         initializeSpotifyData({{ user.spotify.timestamps.start }}, {{ user.spotify.timestamps.end }}, '{{ user.username }}');
         {% else %}
