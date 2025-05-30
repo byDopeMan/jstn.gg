@@ -3,14 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ user.display_name }}</title>
+    <title>{{ user.display_name }} - Developer Portfolio</title>
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Meta tags for better SEO and social media -->
+    <meta name="description" content="Personal portfolio of {{ user.display_name }}, a learning developer from {{ user.location }}">
+    <meta property="og:title" content="{{ user.display_name }} - Developer Portfolio">
+    <meta property="og:description" content="{{ user.bio }}">
+    <meta property="og:image" content="{{ user.avatar_url }}">
+    <meta name="twitter:card" content="summary">
 </head>
 <body>
     <!-- Video Preview Overlay -->
     <div id="videoPreview" class="video-preview">
         <div class="preview-content">
-            <h1 class="preview-title">learning developer</h1>
+            <h1 class="preview-title">{{ user.bio }}</h1>
             <div class="play-button" onclick="startExperience()">
                 <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M8 5v14l11-7z"/>
@@ -30,18 +40,36 @@
 
     <!-- Stats in Top Right -->
     <div class="stats">
-        <div class="stat-item">
+        <div class="stat-item" title="Profile Views">
             <svg class="stat-icon" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
             </svg>
             <span>{{ user.views }}</span>
         </div>
-        <div class="stat-item">
+        <div class="stat-item" title="Lines of Code">
             <svg class="stat-icon" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                <path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/>
             </svg>
             <span>1149</span>
+        </div>
+        <div class="stat-item" title="Coffee Consumed">
+            <svg class="stat-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                <line x1="6" y1="1" x2="6" y2="4"/>
+                <line x1="10" y1="1" x2="10" y2="4"/>
+                <line x1="14" y1="1" x2="14" y2="4"/>
+            </svg>
+            <span>∞</span>
+        </div>
+    </div>
+
+    <!-- Music Control (floating) -->
+    <div class="music-control" id="musicControl">
+        <div class="music-icon" onclick="toggleMusic()">
+            <svg id="musicIcon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M9 18V5l12-2v13M6 15v8H4v-8c0-1.1.9-2 2-2s2 .9 2 2M16 13v8h-2v-8c0-1.1.9-2 2-2s2 .9 2 2"/>
+            </svg>
         </div>
     </div>
 
@@ -49,35 +77,55 @@
     <div class="profile-container">
         <!-- Profile Card -->
         <div class="profile-card">
-            <!-- Avatar -->
+            <!-- Avatar with hover effect -->
             <div class="avatar-container">
                 <img src="{{ url_for('static', filename='pfp.png') }}" alt="Avatar" class="avatar">
             </div>
             
-            <!-- Name -->
-            <h1 class="display-name">{{ user.display_name }}</h1>
+            <!-- Name with typing animation -->
+            <h1 class="display-name" id="displayName">{{ user.display_name }}</h1>
             
-            <!-- User-State -->
-            <div class="user-state">{{ user.custom_status }}</div>
+            <!-- User-State with better styling -->
+            <div class="user-state">
+                {% if user.custom_emoji %}
+                    {{ user.custom_emoji }}
+                {% endif %}
+            </div>
             
-            <!-- Location -->
+            <!-- Location with animation -->
             <div class="location">
-                <svg class="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <svg class="location-icon pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                 </svg>
                 <span>{{ user.location }}</span>
             </div>
+
+            <!-- Tech Stack -->
+            <div class="tech-stack">
+                {% for lang in user.languages %}
+                <span class="tech-badge">{{ lang }}</span>
+                {% endfor %}
+            </div>
             
-            <!-- GitHub Icon -->
-            <div class="github-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
+            <!-- Social Links -->
+            <div class="social-links">
+                <a href="https://github.com/{{ user.github_username }}" target="_blank" class="social-link github-link">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    <span>GitHub</span>
+                </a>
+                <a href="#" class="social-link discord-link" onclick="copyDiscord()">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026 13.83 13.83 0 0 0 1.226-1.963.074.074 0 0 0-.041-.104 13.2 13.2 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.246.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028zM8.02 15.278c-1.182 0-2.157-1.069-2.157-2.38 0-1.312.956-2.38 2.157-2.38 1.201 0 2.176 1.068 2.157 2.38 0 1.311-.956 2.38-2.157 2.38zm7.975 0c-1.183 0-2.157-1.069-2.157-2.38 0-1.312.955-2.38 2.157-2.38 1.201 0 2.176 1.068 2.157 2.38 0 1.311-.956 2.38-2.157 2.38z"/>
+                    </svg>
+                    <span>Discord</span>
+                </a>
             </div>
         </div>
         
-        <!-- Discord Status Card -->
+        <!-- Enhanced Discord Status Card -->
         <div class="discord-card">
             <div class="discord-content">
                 <div class="discord-avatar-container">
@@ -88,9 +136,22 @@
                     <div class="discord-name-line">
                         <span class="discord-name">{{ user.username }}</span>
                         <div class="discord-badges">
-                            <div class="badge verified"></div>
-                            <div class="badge premium"></div>
-                            <div class="badge bot"></div>
+                            <!-- Real Discord Badges -->
+                            <div class="badge nitro" title="Discord Nitro">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
+                            <div class="badge early-supporter" title="Early Supporter">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                </svg>
+                            </div>
+                            <div class="badge active-developer" title="Active Developer">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>
+                                </svg>
+                            </div>
                         </div>
                     </div>
                     {% if user.activity != "No activity" %}
@@ -101,44 +162,143 @@
                     {% endif %}
                 </div>
             </div>
-            <button class="action-button">
+            <button class="action-button" onclick="openDiscordProfile()">
                 <svg class="button-icon" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M17.5 12a1.5 1.5 0 01-1.5-1.5A1.5 1.5 0 0117.5 9a1.5 1.5 0 011.5 1.5 1.5 1.5 0 01-1.5 1.5m-3-4A1.5 1.5 0 0113 6.5 1.5 1.5 0 0114.5 5 1.5 1.5 0 0116 6.5 1.5 1.5 0 0114.5 8m-5 0A1.5 1.5 0 018 6.5 1.5 1.5 0 019.5 5 1.5 1.5 0 0111 6.5 1.5 1.5 0 019.5 8m-3 4A1.5 1.5 0 015 10.5 1.5 1.5 0 016.5 9 1.5 1.5 0 018 10.5 1.5 1.5 0 016.5 12M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                    <polyline points="15,3 21,3 21,9"/>
+                    <line x1="10" y1="14" x2="21" y2="3"/>
                 </svg>
             </button>
         </div>
     </div>
 
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 6L9 17l-5-5"/>
+        </svg>
+        <span id="toastMessage">Copied to clipboard!</span>
+    </div>
+
     <!-- Footer -->
     <div class="footer">
-        <span>Made by {{ user.username }}</span>
+        <span>Made with ❤️ by {{ user.username }}</span>
     </div>
 
     <script>
+        let musicPlaying = false;
+        
         function startExperience() {
             const preview = document.getElementById('videoPreview');
             const video = document.getElementById('backgroundVideo');
 
             if (video) {
-                video.volume = 0.25; // 25% volume
+                video.volume = 0.15;
             }
             
-            // Fade out preview
             preview.style.opacity = '0';
             preview.style.pointerEvents = 'none';
             
-            // Remove blur from video
             video.classList.add('unblurred');
-            
-            // Unmute and play video with sound
             video.muted = false;
             video.play().catch(e => console.log('Video play failed:', e));
             
-            // Remove preview after animation
             setTimeout(() => {
                 preview.style.display = 'none';
             }, 800);
+
+            // Start typing animation
+            setTimeout(() => {
+                typeWriterEffect();
+            }, 1000);
         }
+
+        function typeWriterEffect() {
+            const element = document.getElementById('displayName');
+            const text = element.textContent;
+            element.textContent = '';
+            element.style.borderRight = '2px solid rgba(255,255,255,0.7)';
+            
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, 100);
+                } else {
+                    setTimeout(() => {
+                        element.style.borderRight = 'none';
+                    }, 1000);
+                }
+            }
+            type();
+        }
+
+        function toggleMusic() {
+            const video = document.getElementById('backgroundVideo');
+            const icon = document.getElementById('musicIcon');
+            
+            if (musicPlaying) {
+                video.muted = true;
+                icon.innerHTML = '<path d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/>';
+                musicPlaying = false;
+            } else {
+                video.muted = false;
+                icon.innerHTML = '<path d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6M17 9l6 6"/>';
+                musicPlaying = true;
+            }
+        }
+
+        function copyDiscord() {
+            navigator.clipboard.writeText('{{ user.username }}').then(() => {
+                showToast('Discord username copied!');
+            });
+        }
+
+        function openDiscordProfile() {
+            // Since Discord doesn't have public profile URLs, we'll copy the username
+            copyDiscord();
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Add some hover effects
+        document.querySelectorAll('.tech-badge').forEach(badge => {
+            badge.addEventListener('mouseenter', () => {
+                badge.style.transform = 'translateY(-2px) scale(1.05)';
+            });
+            badge.addEventListener('mouseleave', () => {
+                badge.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Easter egg - Konami code
+        let konamiCode = [];
+        const konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
+        
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.keyCode);
+            if (konamiCode.length > konami.length) {
+                konamiCode.shift();
+            }
+            
+            if (konamiCode.join(',') === konami.join(',')) {
+                showToast('🎉 Easter egg found! You are awesome!');
+                document.body.style.filter = 'hue-rotate(180deg)';
+                setTimeout(() => {
+                    document.body.style.filter = 'none';
+                }, 5000);
+            }
+        });
     </script>
 </body>
 </html>

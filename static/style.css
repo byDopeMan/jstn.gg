@@ -157,11 +157,6 @@ body {
     backdrop-filter: blur(10px);
 }
 
-.stat-icon {
-    width: 12px;
-    height: 12px;
-    opacity: 0.7;
-}
 
 /* Profile Container */
 .profile-container {
@@ -476,11 +471,6 @@ body {
         gap: 12px;
     }
     
-    .stat-item {
-        padding: 4px 8px;
-        font-size: 12px;
-    }
-    
     .display-name {
         font-size: 28px;
     }
@@ -516,5 +506,292 @@ body {
 @media (prefers-color-scheme: dark) {
     body {
         background: #0a0a0a;
+    }
+}
+
+/* Add these new styles to your existing style.css */
+
+/* Tech Stack Badges */
+.tech-stack {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+
+.tech-badge {
+    background: linear-gradient(135deg, rgba(88, 101, 242, 0.2), rgba(88, 101, 242, 0.1));
+    border: 1px solid rgba(88, 101, 242, 0.3);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.tech-badge:hover {
+    background: linear-gradient(135deg, rgba(88, 101, 242, 0.3), rgba(88, 101, 242, 0.2));
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(88, 101, 242, 0.3);
+}
+
+/* Social Links */
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.social-link svg {
+    width: 18px;
+    height: 18px;
+}
+
+.social-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+}
+
+.github-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+}
+
+.discord-link:hover {
+    background: rgba(88, 101, 242, 0.2);
+    border-color: rgba(88, 101, 242, 0.3);
+    box-shadow: 0 8px 20px rgba(88, 101, 242, 0.3);
+}
+
+/* Enhanced Avatar */
+.avatar-container {
+    position: relative;
+    margin-bottom: 24px;
+}
+
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Enhanced Discord Badges */
+.discord-badges {
+    display: flex;
+    gap: 6px;
+}
+
+.badge {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.badge svg {
+    width: 10px;
+    height: 10px;
+}
+
+.badge.nitro {
+    background: linear-gradient(135deg, #ff73fa, #ff3d71);
+    box-shadow: 0 0 12px rgba(255, 115, 250, 0.4);
+}
+
+.badge.early-supporter {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    box-shadow: 0 0 12px rgba(255, 107, 107, 0.4);
+}
+
+.badge.active-developer {
+    background: linear-gradient(135deg, #26de81, #20bf6b);
+    box-shadow: 0 0 12px rgba(38, 222, 129, 0.4);
+}
+
+.badge:hover {
+    transform: scale(1.2);
+}
+
+/* Music Control */
+.music-control {
+    position: fixed;
+    bottom: 80px;
+    right: 24px;
+    z-index: 100;
+}
+
+.music-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(20px);
+}
+
+.music-icon:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2);
+}
+
+.music-icon svg {
+    width: 20px;
+    height: 20px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Toast Notification */
+.toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: rgba(35, 165, 90, 0.9);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(35, 165, 90, 0.3);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    opacity: 0;
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.toast svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Enhanced Stats */
+.stats .stat-item:nth-child(1) {
+    background: linear-gradient(135deg, rgba(35, 165, 90, 0.2), rgba(35, 165, 90, 0.1));
+    border-color: rgba(35, 165, 90, 0.3);
+}
+
+.stats .stat-item:nth-child(2) {
+    background: linear-gradient(135deg, rgba(88, 101, 242, 0.2), rgba(88, 101, 242, 0.1));
+    border-color: rgba(88, 101, 242, 0.3);
+}
+
+.stats .stat-item:nth-child(3) {
+    background: linear-gradient(135deg, rgba(250, 166, 26, 0.2), rgba(250, 166, 26, 0.1));
+    border-color: rgba(250, 166, 26, 0.3);
+}
+
+/* Pulse Animation */
+.pulse {
+    animation: pulse-location 2s infinite;
+}
+
+@keyframes pulse-location {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+/* Custom Emoji */
+.custom-emoji {
+    font-size: 16px;
+    margin-right: 6px;
+}
+
+/* Enhanced Action Button */
+.action-button:hover {
+    background: rgba(88, 101, 242, 0.2);
+    border-color: rgba(88, 101, 242, 0.3);
+    box-shadow: 0 4px 16px rgba(88, 101, 242, 0.3);
+}
+
+/* Improved responsive design */
+@media (max-width: 480px) {
+    .tech-stack {
+        gap: 6px;
+        margin: 16px 0;
+    }
+    
+    .tech-badge {
+        font-size: 11px;
+        padding: 4px 8px;
+    }
+    
+    .social-links {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .social-link {
+        justify-content: center;
+        padding: 10px 16px;
+    }
+    
+    .stats {
+        flex-direction: column;
+        gap: 8px;
+        top: 12px;
+        right: 12px;
+    }
+    
+    .music-control {
+        bottom: 60px;
+        right: 16px;
+    }
+    
+    .music-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .music-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+/* Improved dark mode */
+@media (prefers-color-scheme: dark) {
+    .tech-badge {
+        background: linear-gradient(135deg, rgba(88, 101, 242, 0.3), rgba(88, 101, 242, 0.2));
+    }
+    
+    .social-link {
+        background: rgba(255, 255, 255, 0.08);
     }
 }
