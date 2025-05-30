@@ -208,138 +208,14 @@
         <span>Made with ❤️ by {{ user.username }}</span>
     </div>
 
+    <script src="/static/script.js"></script>
     <script>
-        let musicPlaying = false;
-        
-        function startExperience() {
-            const preview = document.getElementById('videoPreview');
-            const video = document.getElementById('backgroundVideo');
-
-            if (video) {
-                video.volume = 0.15;
-            }
-            
-            preview.style.opacity = '0';
-            preview.style.pointerEvents = 'none';
-            
-            video.classList.add('unblurred');
-            video.muted = false;
-            video.play().catch(e => console.log('Video play failed:', e));
-            
-            setTimeout(() => {
-                preview.style.display = 'none';
-            }, 800);
-
-            setTimeout(() => {
-                typeWriterEffect();
-            }, 1000);
-        }
-
-        function typeWriterEffect() {
-            const element = document.getElementById('displayName');
-            const text = element.textContent;
-            element.textContent = '';
-            element.style.borderRight = '2px solid rgba(255,255,255,0.7)';
-            
-            let i = 0;
-            function type() {
-                if (i < text.length) {
-                    element.textContent += text.charAt(i);
-                    i++;
-                    setTimeout(type, 100);
-                } else {
-                    setTimeout(() => {
-                        element.style.borderRight = 'none';
-                    }, 1000);
-                }
-            }
-            type();
-        }
-
-        function toggleMusic() {
-            const video = document.getElementById('backgroundVideo');
-            const icon = document.getElementById('musicIcon');
-            
-            if (musicPlaying) {
-                video.muted = true;
-                icon.innerHTML = '<path d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/>';
-                musicPlaying = false;
-            } else {
-                video.muted = false;
-                icon.innerHTML = '<path d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6M17 9l6 6"/>';
-                musicPlaying = true;
-            }
-        }
-
-        function copyDiscord() {
-            navigator.clipboard.writeText('{{ user.username }}').then(() => {
-                showToast('Discord username copied!');
-            });
-        }
-
-        function openDiscordProfile() {
-            copyDiscord();
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            toastMessage.textContent = message;
-            
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        function updateSpotifyProgress() {
-            {% if user.listening_to_spotify and user.spotify and user.spotify.timestamps %}
-            const startTime = {{ user.spotify.timestamps.start }};
-            const endTime = {{ user.spotify.timestamps.end }};
-            const currentTime = Date.now();
-            
-            if (currentTime >= startTime && currentTime <= endTime) {
-                const totalDuration = endTime - startTime;
-                const elapsed = currentTime - startTime;
-                const progress = (elapsed / totalDuration) * 100;
-                
-                const progressFill = document.getElementById('spotifyProgress');
-                if (progressFill) {
-                    progressFill.style.width = Math.min(progress, 100) + '%';
-                }
-            }
-            {% endif %}
-        }
-
-        setInterval(updateSpotifyProgress, 1000);
-        updateSpotifyProgress();
-
-        document.querySelectorAll('.tech-badge').forEach(badge => {
-            badge.addEventListener('mouseenter', () => {
-                badge.style.transform = 'translateY(-2px) scale(1.05)';
-            });
-            badge.addEventListener('mouseleave', () => {
-                badge.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-
-        let konamiCode = [];
-        const konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
-        
-        document.addEventListener('keydown', (e) => {
-            konamiCode.push(e.keyCode);
-            if (konamiCode.length > konami.length) {
-                konamiCode.shift();
-            }
-            
-            if (konamiCode.join(',') === konami.join(',')) {
-                showToast('🎉 Easter egg found! You are awesome!');
-                document.body.style.filter = 'hue-rotate(180deg)';
-                setTimeout(() => {
-                    document.body.style.filter = 'none';
-                }, 5000);
-            }
-        });
+        // Template-Daten an JavaScript übergeben
+        {% if user.listening_to_spotify and user.spotify and user.spotify.timestamps %}
+        initializeSpotifyData({{ user.spotify.timestamps.start }}, {{ user.spotify.timestamps.end }}, '{{ user.username }}');
+        {% else %}
+        initializeSpotifyData(null, null, '{{ user.username }}');
+        {% endif %}
     </script>
 </body>
 </html>
