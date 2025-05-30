@@ -37,7 +37,7 @@ def home():
         })
 
         # Render template first to make sure it works
-        rendered_template = render_template("profile.html", user=user)
+        rendered_template = render_template("profile.jinja2", user=user)
         response = make_response(rendered_template)
         
         # Set cookie with current timestamp if we counted this visit

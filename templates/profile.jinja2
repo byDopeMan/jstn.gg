@@ -62,7 +62,7 @@
     <div class="music-control" id="musicControl">
         <div class="music-icon" onclick="toggleMusic()">
             <svg id="musicIcon" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M9 18V5l12-2v13M6 15v8H4v-8c0-1.1.9-2 2-2s2 .9 2 2M16 13v8h-2v-8c0-1.1.9-2 2-2s2 .9 2 2"/>
+                <path d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/>
             </svg>
         </div>
     </div>
@@ -78,9 +78,6 @@
             <div class="user-state">
                 {% if user.custom_emoji %}
                     {{ user.custom_emoji }}
-                {% endif %}
-                {% if user.custom_status %}
-                    {{ user.custom_status }}
                 {% endif %}
             </div>
             
