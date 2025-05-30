@@ -32,7 +32,7 @@ def home():
             "languages": ["Python", "JavaScript", "TypeScript"],
             "location": "Germany",
             "views": views,
-            "github_username": "jstin-frl", 
+            "github_username": "byDopeMan", 
             "bio": "learning developer"
         })
 
@@ -55,4 +55,4 @@ def home():
 
 if __name__ == "__main__":
     init_db()
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=27016)

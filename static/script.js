@@ -625,6 +625,173 @@ function showAchievementPopup() {
     }, 4000);
 }
 
+function triggerWeedMode() {
+    showToast('🌿 HOTBOX MODE ACTIVATED! 420 BLAZEIT! 🚬', 'matrix');
+    
+    // Create hotbox overlay
+    const hotbox = document.createElement('div');
+    hotbox.id = 'hotbox-overlay';
+    hotbox.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        pointer-events: none;
+        background: radial-gradient(circle at center, 
+            rgba(200, 255, 200, 0.1) 0%,
+            rgba(150, 255, 150, 0.2) 20%,
+            rgba(100, 200, 100, 0.3) 40%,
+            rgba(80, 150, 80, 0.4) 60%,
+            rgba(60, 100, 60, 0.5) 80%,
+            rgba(40, 80, 40, 0.7) 100%
+        );
+        animation: hotbox-pulse 3s ease-in-out infinite;
+    `;
+    
+    const hotboxStyle = document.createElement('style');
+    hotboxStyle.textContent = `
+        @keyframes hotbox-pulse {
+            0% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
+            100% { opacity: 0.3; transform: scale(1); }
+        }
+        @keyframes smoke-drift {
+            0% { transform: translateY(100px) translateX(0px) rotate(0deg) scale(0.5); opacity: 0; }
+            10% { opacity: 0.8; }
+            50% { transform: translateY(-50px) translateX(20px) rotate(180deg) scale(1.2); opacity: 0.6; }
+            100% { transform: translateY(-200px) translateX(-30px) rotate(360deg) scale(2); opacity: 0; }
+        }
+        @keyframes weed-glow {
+            0% { filter: hue-rotate(0deg) saturate(1) brightness(1); }
+            25% { filter: hue-rotate(90deg) saturate(1.5) brightness(1.2); }
+            50% { filter: hue-rotate(180deg) saturate(2) brightness(0.9); }
+            75% { filter: hue-rotate(270deg) saturate(1.3) brightness(1.1); }
+            100% { filter: hue-rotate(360deg) saturate(1) brightness(1); }
+        }
+        @keyframes chill-float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(2deg); }
+            50% { transform: translateY(-5px) rotate(-1deg); }
+            75% { transform: translateY(-15px) rotate(1deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+    `;
+    document.head.appendChild(hotboxStyle);
+    document.body.appendChild(hotbox);
+    
+    // Add green glow to everything
+    document.body.style.animation = 'weed-glow 4s ease-in-out infinite';
+    
+    // Make elements float like they're high
+    const floatElements = document.querySelectorAll('.profile-card, .discord-card, .tech-badge, .avatar');
+    floatElements.forEach((el, index) => {
+        setTimeout(() => {
+            el.style.animation = 'chill-float 6s ease-in-out infinite';
+            el.style.animationDelay = `${index * 0.5}s`;
+        }, index * 200);
+    });
+    
+    // Create smoke particles
+    const smokeEmojis = ['💨', '☁️', '🌫️'];
+    for (let i = 0; i < 25; i++) {
+        setTimeout(() => {
+            const smoke = document.createElement('div');
+            smoke.innerHTML = smokeEmojis[Math.floor(Math.random() * smokeEmojis.length)];
+            smoke.style.cssText = `
+                position: fixed;
+                left: ${Math.random() * window.innerWidth}px;
+                bottom: 0px;
+                font-size: ${Math.random() * 40 + 20}px;
+                pointer-events: none;
+                z-index: 9998;
+                animation: smoke-drift ${Math.random() * 3 + 4}s ease-out forwards;
+                filter: blur(${Math.random() * 2}px);
+            `;
+            document.body.appendChild(smoke);
+            
+            setTimeout(() => {
+                if (smoke.parentNode) {
+                    smoke.parentNode.removeChild(smoke);
+                }
+            }, 7000);
+        }, i * 200);
+    }
+    
+    // Add weed leaves falling
+    const weedEmojis = ['🌿', '🍃', '🌱'];
+    for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+            const leaf = document.createElement('div');
+            leaf.innerHTML = weedEmojis[Math.floor(Math.random() * weedEmojis.length)];
+            leaf.style.cssText = `
+                position: fixed;
+                left: ${Math.random() * window.innerWidth}px;
+                top: -50px;
+                font-size: ${Math.random() * 30 + 15}px;
+                pointer-events: none;
+                z-index: 9997;
+                animation: leaf-fall ${Math.random() * 3 + 5}s linear forwards;
+            `;
+            
+            const leafStyle = document.createElement('style');
+            leafStyle.textContent = `
+                @keyframes leaf-fall {
+                    0% { transform: translateY(-50px) rotate(0deg); }
+                    100% { transform: translateY(${window.innerHeight + 100}px) rotate(${Math.random() * 720}deg); }
+                }
+            `;
+            
+            if (!document.querySelector('#leaf-fall-styles')) {
+                leafStyle.id = 'leaf-fall-styles';
+                document.head.appendChild(leafStyle);
+            }
+            
+            document.body.appendChild(leaf);
+            
+            setTimeout(() => {
+                if (leaf.parentNode) {
+                    leaf.parentNode.removeChild(leaf);
+                }
+            }, 8000);
+        }, i * 300);
+    }
+    
+    
+    // Add trippy text effects
+    const textElements = document.querySelectorAll('.display-name, .discord-name, h1, h2, h3');
+    textElements.forEach(el => {
+        el.style.textShadow = '0 0 10px #00ff00, 0 0 20px #90EE90, 0 0 30px #32CD32';
+        el.style.animation = 'weed-glow 3s ease-in-out infinite';
+    });
+    
+    setTimeout(() => {
+        // Cleanup
+        document.body.style.animation = '';
+        floatElements.forEach(el => {
+            el.style.animation = '';
+        });
+        textElements.forEach(el => {
+            el.style.textShadow = '';
+            el.style.animation = '';
+        });
+        
+        if (hotbox.parentNode) {
+            hotbox.parentNode.removeChild(hotbox);
+        }
+        if (musicBars.parentNode) {
+            musicBars.parentNode.removeChild(musicBars);
+        }
+        
+        document.head.removeChild(hotboxStyle);
+        document.head.removeChild(musicBarStyle);
+        
+        showToast('😎 Chill session ended... come back anytime! 🌿');
+    }, 15000);
+}
+
+
 function createEnhancedSparkles() {
     const effects = ['✨', '⭐', '🌟', '💫', '🎉', '🎊', '💎', '🔥'];
     
@@ -929,68 +1096,541 @@ function triggerAvatarTransformation() {
     }, 6000);
 }
 
-// SCREEN WARP EFFECT
-function triggerScreenWarp() {
-    showToast('🌀 Reality is bending... 🌀', 'glitch');
-    
-    const warpStyle = document.createElement('style');
-    warpStyle.textContent = `
-        @keyframes screen-warp {
-            0% { transform: perspective(1000px) rotateX(0deg) rotateY(0deg); }
-            25% { transform: perspective(1000px) rotateX(5deg) rotateY(5deg) scale(0.95); }
-            50% { transform: perspective(1000px) rotateX(-5deg) rotateY(-5deg) scale(1.05); }
-            75% { transform: perspective(1000px) rotateX(3deg) rotateY(-3deg) scale(0.98); }
-            100% { transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1); }
-        }
-        @keyframes warp-distortion {
-            0% { filter: blur(0px) contrast(1); }
-            50% { filter: blur(2px) contrast(1.2) hue-rotate(180deg); }
-            100% { filter: blur(0px) contrast(1); }
-        }
-    `;
-    document.head.appendChild(warpStyle);
-    
-    document.body.style.animation = 'screen-warp 3s ease-in-out, warp-distortion 2s ease-in-out';
-    
-    setTimeout(() => {
-        document.body.style.animation = '';
-        document.head.removeChild(warpStyle);
-    }, 6000);
-}
 
 // TYPING CHAOS MODE
 function triggerTypingChaos() {
     const textElements = document.querySelectorAll('.display-name, .discord-name, .tech-badge, h1, h2, h3, p, span');
     
-    showToast('⌨️ TYPING CHAOS ACTIVATED! ⌨️', 'glitch');
+    showToast('⌨️ EXTENDED TYPING CHAOS ACTIVATED! ⌨️', 'glitch');
     
     const originalTexts = [];
-    const chaosChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
+    const chaosChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ';
     
     textElements.forEach((el, index) => {
         originalTexts[index] = el.textContent;
         
-        let iterations = 0;
-        const maxIterations = 20;
+        // Phase 1: Complete chaos for 3 seconds
+        let chaosPhase = 0;
+        const totalPhases = 4;
         
-        const chaosInterval = setInterval(() => {
-            let chaosText = '';
-            for (let i = 0; i < originalTexts[index].length; i++) {
-                if (iterations > i) {
-                    chaosText += originalTexts[index][i];
-                } else {
-                    chaosText += chaosChars[Math.floor(Math.random() * chaosChars.length)];
+        const runChaosPhase = () => {
+            let iterations = 0;
+            const maxIterations = chaosPhase === 0 ? 60 : 40; // First phase longer
+            const speed = chaosPhase === 0 ? 30 : 50; // First phase faster
+            
+            const chaosInterval = setInterval(() => {
+                let chaosText = '';
+                for (let i = 0; i < originalTexts[index].length; i++) {
+                    if (chaosPhase > 0 && iterations > i + (chaosPhase * 5)) {
+                        chaosText += originalTexts[index][i];
+                    } else {
+                        chaosText += chaosChars[Math.floor(Math.random() * chaosChars.length)];
+                    }
+                }
+                el.textContent = chaosText;
+                iterations++;
+                
+                if (iterations > maxIterations) {
+                    clearInterval(chaosInterval);
+                    chaosPhase++;
+                    
+                    if (chaosPhase < totalPhases) {
+                        setTimeout(() => runChaosPhase(), 200);
+                    } else {
+                        // Final restoration
+                        el.textContent = originalTexts[index];
+                        
+                        // Add glowing effect at the end
+                        el.style.textShadow = '0 0 10px #00ff00, 0 0 20px #00ff00';
+                        setTimeout(() => {
+                            el.style.textShadow = '';
+                        }, 1000);
+                    }
+                }
+            }, speed);
+        };
+        
+        // Start chaos with a slight delay for each element
+        setTimeout(() => runChaosPhase(), index * 100);
+    });
+}
+
+function triggerCaseOpening() {
+    const profileCard = document.querySelector('.profile-card');
+    if (!profileCard) return;
+    
+    // Background Audio Management
+    const backgroundAudio = document.querySelector('audio[src*="background.mp4"], audio[src*="background"]');
+    const originalVolume = backgroundAudio ? backgroundAudio.volume : 0.15;
+    const reducedVolume = originalVolume * 0.3;
+    
+    if (backgroundAudio) {
+        backgroundAudio.volume = reducedVolume;
+    }
+    
+    // CS:GO Skins
+    const skins = [
+        // Blue (Restricted)
+        {
+            name: "SSG 08 | Abyss",
+            rarity: "restricted",
+            color: "#4b69ff",
+            image: "https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_ssg08_aq_leviathan_light_large.0d0ce425b5374642d0d1fbfd0c0ec634eb8570fb.png",
+            weight: 40
+        },
+        {
+            name: "UMP-45 | Labyrinth",
+            rarity: "restricted", 
+            color: "#4b69ff",
+            image: "https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_ump45_hy_lines_orange_light_large.d004ea389236e6fa5da2f0555ab5b3723bdf36d1.png",
+            weight: 40
+        },
+        {
+            name: "Negev | Desert-Strike",
+            rarity: "restricted",
+            color: "#4b69ff",
+            image: "https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_negev_cu_negev_titanstorm_light_large.eb7badc75ecbb1b4cdf35bfb53088731bbe11cb0.png",
+            weight: 40
+        },
+        // Purple (Classified)
+        {
+            name: "Nova | Koi",
+            rarity: "classified",
+            color: "#d32ce6",
+            image: "https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_nova_cu_nova_koi_light_large.28c3fe03f736b48dee10e1e88e77ac02132dcba6.png",
+            weight: 15
+        },
+        {
+            name: "P250 | Supernova",
+            rarity: "classified",
+            color: "#d32ce6",
+            image: "https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_p250_cu_bittersweet_light_large.83cd48968d79412e0cf2233b8e18602ff2790ad4.png",
+            weight: 15
+        },
+        // Pink (Covert)
+        {
+            name: "Desert Eagle | Conspiracy",
+            rarity: "covert",
+            color: "#eb4b4b",
+            image: "https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_deagle_cu_deagle_aureus_light_large.7fa76057cb05f2cab829be448f120ae540715d0e.png",
+            weight: 4
+        },
+        {
+            name: "M4A1-S | Cyrex",
+            rarity: "covert",
+            color: "#eb4b4b",
+            image: "https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_m4a1_silencer_cu_m4a1s_cyrex_light_large.144b4053eb73b4a47f8128ebb0e808d8e28f5b9c.png",
+            weight: 4
+        },
+        // Gold (Knife)
+        {
+            name: "★ Butterfly Knife | Case Hardened",
+            rarity: "knife",
+            color: "#ffd700",
+            image: "https://steamcdn-a.akamaihd.net/apps/730/icons/econ/default_generated/weapon_knife_butterfly_aq_oiled_light_large.d53e80b706e7d7fac9d22d265595ea1a959ea79b.png",
+            weight: 1
+        }
+    ];
+    
+    showToast('📦 Opening CS:GO Case... 🎰', 'rainbow');
+    
+    // Hauptcontainer
+    const caseContainer = document.createElement('div');
+    caseContainer.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        border-radius: inherit;
+        z-index: 1000;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Arial', sans-serif;
+    `;
+    
+    // CSS Styles
+    const caseStyle = document.createElement('style');
+    caseStyle.textContent = `
+        .case-opening-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #case-opening-container {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .case-spinner {
+            height: 140px;
+            width: 90%;
+            max-width: 800px;
+            position: relative;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 2px solid #3c3759;
+            background: transparent;
+            overflow: hidden;
+        }
+        
+        .case-spinner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, #d16266, #ff4444, #d16266);
+            z-index: 100;
+            box-shadow: 0 0 10px #d16266;
+            transform: translateX(-50%);
+        }
+        
+        .case-spinner-container {
+            height: 100%;
+            width: 999999px;
+            display: flex;
+            align-items: center;
+            transition: transform 10s cubic-bezier(0.05, 0.4, 0.1, 1);
+            transform: translateX(0px);
+        }
+        
+        .case-item {
+            width: 120px;
+            height: 110px;
+            margin: 0 8px;
+            border-radius: 8px;
+            border: 2px solid #70677c;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: #14202b;
+            position: relative;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .case-item.rarity-restricted {
+            border-bottom: 4px solid #4b69ff;
+            box-shadow: 0 0 15px rgba(75, 105, 255, 0.3);
+        }
+        
+        .case-item.rarity-classified {
+            border-bottom: 4px solid #d32ce6;
+            box-shadow: 0 0 15px rgba(211, 44, 230, 0.3);
+        }
+        
+        .case-item.rarity-covert {
+            border-bottom: 4px solid #eb4b4b;
+            box-shadow: 0 0 15px rgba(235, 75, 75, 0.3);
+        }
+        
+        .case-item.rarity-knife {
+            border-bottom: 4px solid #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            background-image: 
+                url('DEIN-KNIFE-URL'),
+                linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+            background-blend-mode: overlay;
+        }
+
+        
+        .case-item.winning-item {
+            border: 3px solid #66b233;
+            border-bottom: 4px solid #66b233;
+            box-shadow: 0 0 25px rgba(102, 178, 51, 0.8);
+            transform: scale(1.05);
+        }
+        
+        .case-title {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .case-result {
+            color: #ffd700;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: center;
+            text-shadow: 0 0 10px #ffd700;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        
+        .case-result.show {
+            opacity: 1;
+        }
+        
+        .knife-celebration {
+            animation: knifeGlow 1s ease-in-out infinite;
+        }
+        
+        .rolling-status {
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+    `;
+    document.head.appendChild(caseStyle);
+    
+    // Gewichtete Skin-Auswahl für Filler-Items
+    function getRandomFillerSkin() {
+        const fillerSkins = skins.slice(0, 4);
+        const totalWeight = fillerSkins.reduce((sum, skin) => sum + skin.weight, 0);
+        let random = Math.random() * totalWeight;
+        
+        for (const skin of fillerSkins) {
+            random -= skin.weight;
+            if (random <= 0) return skin;
+        }
+        return fillerSkins[0];
+    }
+    
+    // Container erstellen
+    const originalChildren = Array.from(profileCard.children);
+    originalChildren.forEach(child => {
+        child.dataset.originalDisplay = child.style.display || '';
+        child.style.display = 'none';
+    });
+
+    const openingContainer = document.createElement('div');
+    openingContainer.className = 'case-opening-container';
+    
+    const rollingStatus = document.createElement('div');
+    rollingStatus.className = 'rolling-status';
+    rollingStatus.textContent = 'Rolling...';
+    
+    const title = document.createElement('div');
+    title.className = 'case-title';
+    title.textContent = 'CS:GO Case Opening';
+    
+    const spinner = document.createElement('div');
+    spinner.className = 'case-spinner';
+    
+    const spinnerContainer = document.createElement('div');
+    spinnerContainer.className = 'case-spinner-container';
+    
+    // KORRIGIERTE BERECHNUNG: Pointer-Position ermitteln
+    const spinnerRect = spinner.getBoundingClientRect ? { width: 800 } : { width: 800 }; // Fallback
+    const pointerPosition = spinnerRect.width / 2; // Exakte Mitte des Spinners
+    
+    // Items generieren
+    const items = [];
+    const winningIndex = 57;
+    const knifeItem = skins[skins.length - 1];
+    
+    for (let i = 0; i < 120; i++) {
+        let skin;
+        if (i === winningIndex) {
+            skin = knifeItem; // GARANTIERT das Messer
+        } else if (i >= winningIndex - 3 && i <= winningIndex + 3) {
+            if (Math.random() < 0.3) {
+                skin = skins[3];
+            } else if (Math.random() < 0.5) {
+                skin = skins[2];
+            } else {
+                skin = getRandomFillerSkin();
+            }
+        } else {
+            skin = getRandomFillerSkin();
+        }
+        
+        const item = document.createElement('div');
+        item.className = `case-item rarity-${skin.rarity}`;
+        item.style.backgroundImage = `url('${skin.image}')`;
+        item.id = `item-${i}`;
+        
+        items.push({ element: item, skin: skin, index: i });
+        spinnerContainer.appendChild(item);
+    }
+    
+    const resultDiv = document.createElement('div');
+    resultDiv.className = 'case-result';
+    resultDiv.textContent = 'Rolling...';
+    
+    spinner.appendChild(spinnerContainer);
+    openingContainer.appendChild(rollingStatus);
+    openingContainer.appendChild(title);
+    openingContainer.appendChild(spinner);
+    openingContainer.appendChild(resultDiv);
+    caseContainer.appendChild(openingContainer);
+    
+    profileCard.style.position = 'relative';
+    profileCard.appendChild(caseContainer);
+    
+    // ⚙️ KONFIGURATION - Hier können Sie testen!
+    const AUDIO_TRIGGER_OFFSET = 176; // Pixel-Offset für Audio-Trigger (negativ = früher, positiv = später)
+    const KNIFE_POSITION_OFFSET = -176; // Offset für Messer-Position (negativ = weiter links, positiv = weiter rechts)
+    
+    // Animation starten
+    setTimeout(() => {
+        // KORRIGIERTE BERECHNUNG
+        const itemWidth = 136; // 120px + 16px margin
+        
+        // Das Messer soll GENAU unter dem Pointer landen (mit Offset-Korrektur)
+        const finalPosition = -(winningIndex * itemWidth) + (pointerPosition - 60) + KNIFE_POSITION_OFFSET;
+
+        
+        console.log(`🎯 CONFIG: Audio Offset: ${AUDIO_TRIGGER_OFFSET}px, Knife Offset: ${KNIFE_POSITION_OFFSET}px`);
+        console.log(`Messer Index: ${winningIndex}, Item Width: ${itemWidth}, Pointer Position: ${pointerPosition}, Final Position: ${finalPosition}`);
+        
+        spinnerContainer.style.transform = `translateX(${finalPosition}px)`;
+        showToast('🎰 Rolling for items... 🎯', 'matrix');
+        
+        // KORRIGIERTES Audio-System mit Offset
+        window.animationStartTime = Date.now();
+        startTickingSystem(finalPosition, pointerPosition, itemWidth, AUDIO_TRIGGER_OFFSET);
+    }, 100);
+    
+    // KORRIGIERTES Tick-System mit Audio-Offset
+    function startTickingSystem(finalPos, pointerPos, itemWidth, audioOffset = 0) {
+        const animationDuration = 10000;
+        const startPos = 0;
+        
+        // Effektive Pointer-Position für Audio-Trigger (mit Offset)
+        const effectivePointerPos = pointerPos + audioOffset;
+        
+        let lastTriggerIndex = -1;
+        
+        console.log(`🔊 Audio-System: Pointer bei ${pointerPos}px, Effektive Position für Audio: ${effectivePointerPos}px`);
+        
+        const audioChecker = setInterval(() => {
+            const elapsed = Date.now() - window.animationStartTime;
+            const progress = Math.min(elapsed / animationDuration, 1);
+            const easedProgress = 1 - Math.pow(1 - progress, 3);
+            
+            // Aktuelle Position des Containers
+            const currentPos = startPos + (finalPos - startPos) * easedProgress;
+            
+            // Welches Item ist gerade unter dem EFFEKTIVEN Pointer (mit Audio-Offset)?
+            const itemIndexAtPointer = Math.floor((effectivePointerPos - currentPos) / itemWidth);
+            
+            // Audio triggern wenn ein neues Item unter den effektiven Pointer kommt
+            if (itemIndexAtPointer !== lastTriggerIndex && itemIndexAtPointer >= 0 && itemIndexAtPointer < 120) {
+                // Prüfen ob das Item wirklich unter dem effektiven Pointer ist
+                const itemLeftEdge = currentPos + (itemIndexAtPointer * itemWidth);
+                const itemRightEdge = itemLeftEdge + 120; // Item-Breite ohne Margin
+                
+                if (itemLeftEdge <= effectivePointerPos && effectivePointerPos <= itemRightEdge) {
+                    lastTriggerIndex = itemIndexAtPointer;
+                    
+                    console.log(`🔊 Audio Trigger: Item ${itemIndexAtPointer} unter effektivem Pointer bei ${effectivePointerPos}px (Offset: ${audioOffset}px)`);
+                    
+                    // Tick-Audio abspielen
+                    try {
+                        const tickSound = new Audio('/static/case_tick.wav');
+                        tickSound.volume = 0.5;
+                        tickSound.play().catch(e => console.log('Audio failed:', e));
+                    } catch (e) {
+                        console.log('Audio not available');
+                    }
                 }
             }
-            el.textContent = chaosText;
-            iterations++;
             
-            if (iterations > maxIterations) {
-                clearInterval(chaosInterval);
-                el.textContent = originalTexts[index];
+            if (progress >= 1) {
+                clearInterval(audioChecker);
+                console.log(`Animation finished. Final item should be: ${winningIndex} (${items[winningIndex].skin.name})`);
+                
+                // VALIDIERUNG: Welches Item ist wirklich unter dem ORIGINALEN Pointer?
+                const finalItemIndex = Math.floor((pointerPos - finalPos) / itemWidth);
+                console.log(`✅ Validation: Item ${finalItemIndex} is actually under original pointer (${pointerPos}px)`);
+                
+                if (finalItemIndex === winningIndex) {
+                    console.log('🎯 SUCCESS: Knife is correctly positioned!');
+                } else {
+                    console.log(`❌ ERROR: Expected item ${winningIndex}, but got ${finalItemIndex}`);
+                    console.log(`💡 Try adjusting KNIFE_POSITION_OFFSET. Current: ${KNIFE_POSITION_OFFSET}px`);
+                }
             }
-        }, 50);
-    });
+        }, 25);
+    }
+    
+    // Messer highlighten nach Animation
+    setTimeout(() => {
+        const winningItem = document.getElementById(`item-${winningIndex}`);
+        const knifeDropAudio = new Audio('/static/case_opened.wav');
+        
+        if (winningItem) {
+            winningItem.classList.add('winning-item');
+            winningItem.classList.add('knife-celebration');
+
+            knifeDropAudio.volume = 0.8;
+            knifeDropAudio.play().catch(e => console.warn('Knife drop audio error:', e));
+
+            rollingStatus.textContent = '★ KNIFE DROPPED! ★';
+            rollingStatus.style.color = '#ffd700';
+            rollingStatus.style.textShadow = '0 0 15px #ffd700';
+            
+            resultDiv.textContent = `★ ${knifeItem.name} ★`;
+            resultDiv.classList.add('show');
+            
+            caseContainer.style.background = `
+                radial-gradient(circle at center, 
+                    rgba(255, 215, 0, 0.2) 0%, 
+                    rgba(255, 215, 0, 0.05) 0%, 
+                    #0c0c1a 70%)
+            `;
+            
+            showToast('🔥 ★ KNIFE UNBOXED! ★ 🔥', 'rainbow');
+            
+            // Celebration Effects (falls vorhanden)
+            if (typeof createFireworks === 'function') createFireworks();
+            if (typeof createMagicSparkles === 'function') createMagicSparkles();
+        }
+        setTimeout(() => {
+            originalChildren.forEach(child => {
+                child.style.display = child.dataset.originalDisplay || '';
+                delete child.dataset.originalDisplay;
+            });
+        }, 5770);
+
+    }, 10500);
+    
+    // Cleanup
+    setTimeout(() => {
+        caseContainer.style.transition = 'opacity 2s ease-out';
+        caseContainer.style.opacity = '0';
+        
+        if (backgroundAudio) {
+            const volumeInterval = setInterval(() => {
+                if (backgroundAudio.volume < originalVolume) {
+                    backgroundAudio.volume = Math.min(backgroundAudio.volume + 0.01, originalVolume);
+                } else {
+                    backgroundAudio.volume = originalVolume;
+                    clearInterval(volumeInterval);
+                }
+            }, 50);
+        }
+        
+        setTimeout(() => {
+            if (caseContainer.parentNode) {
+                caseContainer.parentNode.removeChild(caseContainer);
+            }
+            if (caseStyle.parentNode) {
+                caseStyle.parentNode.removeChild(caseStyle);
+            }
+            profileCard.style.position = '';
+            showToast('🎉 Case opening completed! GG! 🎉');
+        }, 2000);
+    }, 14000);
 }
 
 // Initialize everything when DOM is loaded
@@ -1055,18 +1695,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // 3. ENHANCED SECRET WORD TYPING
     let typedString = '';
     const secretCodes = {
-        'matrix': triggerMatrixEffect,
         'rainbow': triggerRainbowMode,
         'gravity': triggerGravityMode,
         'glitch': triggerGlitchMode,
-        'dance': triggerDanceMode,
         'secret': triggerSecretMessage,
-        'sparkle': createEnhancedSparkles,
-        'fireworks': createFireworks,
-        'warp': triggerScreenWarp,
         'chaos': triggerTypingChaos,
         'magic': createMagicSparkles,
-        'ultimate': triggerUltimateKonamiMode
+        'weed': triggerWeedMode,        // Enhanced hotbox mode
+        '420': triggerWeedMode,         // Alternative trigger
+        'case': triggerCaseOpening,
     };
 
     document.addEventListener('keypress', (e) => {
@@ -1138,65 +1775,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 6. ENHANCED SCROLL PATTERNS
-    let scrollPattern = [];
-    let lastScrollTop = 0;
-    
-    window.addEventListener('scroll', () => {
-        const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
-        if (Math.abs(currentScrollTop - lastScrollTop) > 10) { // Minimum scroll distance
-            if (currentScrollTop > lastScrollTop) {
-                scrollPattern.push('down');
-            } else if (currentScrollTop < lastScrollTop) {
-                scrollPattern.push('up');
-            }
-            
-            // Keep only last 8 scroll directions
-            if (scrollPattern.length > 8) {
-                scrollPattern.shift();
-            }
-            
-            // Check for different patterns
-            const patternString = scrollPattern.join(',');
-            
-            if (patternString === 'up,down,up,down,up,down') {
-                triggerGlitchMode();
-                scrollPattern = [];
-            } else if (patternString === 'down,down,up,up,down,up') {
-                triggerScreenWarp();
-                scrollPattern = [];
-            } else if (patternString.includes('up,up,up,up')) {
-                createFireworks();
-                scrollPattern = [];
-            }
-            
-            lastScrollTop = currentScrollTop;
-        }
-    });
-
-    // 7. TAB VISIBILITY ENHANCED
-    let tabChangeCount = 0;
-    let awayTime;
-    
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-            awayTime = Date.now();
-            tabChangeCount++;
-        } else {
-            const timeAway = Date.now() - (awayTime || Date.now());
-            
-            if (timeAway > 10000) { // Away for more than 10 seconds
-                showToast('👋 Welcome back! I missed you! 💙');
-                createEnhancedSparkles();
-            } else if (tabChangeCount >= 3) {
-                showToast('🤔 Stop switching tabs and enjoy the show! 😄');
-                triggerDanceMode();
-                tabChangeCount = 0;
-            }
-        }
-    });
-
     // 8. TIME-BASED ENHANCED SURPRISES
     const now = new Date();
     const hour = now.getHours();
@@ -1248,55 +1826,6 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => triggerUltimateKonamiMode(), 2000);
         }, 1000);
     }
-
-    // BONUS: Double-click anywhere for random effect
-    let clickCount = 0;
-    let clickTimer;
-    
-    document.addEventListener('click', (e) => {
-        clickCount++;
-        
-        clearTimeout(clickTimer);
-        clickTimer = setTimeout(() => {
-            if (clickCount >= 5) {
-                const randomEffects = [
-                    triggerRainbowMode,
-                    triggerGlitchMode,
-                    createFireworks,
-                    triggerDanceMode,
-                    createMagicSparkles,
-                    triggerScreenWarp
-                ];
-                
-                const randomEffect = randomEffects[Math.floor(Math.random() * randomEffects.length)];
-                randomEffect();
-                showToast('🎲 Random effect activated! 🎲', 'rainbow');
-            }
-            clickCount = 0;
-        }, 1000);
-    });
-
-    // BONUS: Mouse position tracking for special zones
-    let mouseIdleTimer;
-    document.addEventListener('mousemove', (e) => {
-        clearTimeout(mouseIdleTimer);
-        
-        // Corner magic zones
-        const cornerSize = 50;
-        const isInCorner = (
-            (e.clientX < cornerSize && e.clientY < cornerSize) || // Top-left
-            (e.clientX > window.innerWidth - cornerSize && e.clientY < cornerSize) || // Top-right
-            (e.clientX < cornerSize && e.clientY > window.innerHeight - cornerSize) || // Bottom-left
-            (e.clientX > window.innerWidth - cornerSize && e.clientY > window.innerHeight - cornerSize) // Bottom-right
-        );
-        
-        if (isInCorner) {
-            mouseIdleTimer = setTimeout(() => {
-                showToast('🧙‍♂️ You found a magic corner! ✨');
-                createMagicSparkles();
-            }, 2000);
-        }
-    });
 });
 
 // Function to initialize Spotify data (call this from your template)
