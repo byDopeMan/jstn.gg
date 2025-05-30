@@ -9,7 +9,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Meta tags for better SEO and social media -->
     <meta name="description" content="Personal portfolio of {{ user.display_name }}, a learning developer from {{ user.location }}">
     <meta property="og:title" content="{{ user.display_name }} - Developer Portfolio">
     <meta property="og:description" content="{{ user.bio }}">
@@ -17,7 +16,6 @@
     <meta name="twitter:card" content="summary">
 </head>
 <body>
-    <!-- Video Preview Overlay -->
     <div id="videoPreview" class="video-preview">
         <div class="preview-content">
             <h1 class="preview-title">{{ user.bio }}</h1>
@@ -30,15 +28,12 @@
         </div>
     </div>
 
-    <!-- Background Video -->
     <video id="backgroundVideo" autoplay muted loop playsinline class="background-video">
         <source src="{{ url_for('static', filename='background.mp4') }}" type="video/mp4">
     </video>
     
-    <!-- Background Overlay -->
     <div class="background-overlay"></div>
 
-    <!-- Stats in Top Right -->
     <div class="stats">
         <div class="stat-item" title="Profile Views">
             <svg class="stat-icon" viewBox="0 0 24 24" fill="currentColor">
@@ -64,7 +59,6 @@
         </div>
     </div>
 
-    <!-- Music Control (floating) -->
     <div class="music-control" id="musicControl">
         <div class="music-icon" onclick="toggleMusic()">
             <svg id="musicIcon" viewBox="0 0 24 24" fill="currentColor">
@@ -73,26 +67,23 @@
         </div>
     </div>
 
-    <!-- Main Profile Container -->
     <div class="profile-container">
-        <!-- Profile Card -->
         <div class="profile-card">
-            <!-- Avatar with hover effect -->
             <div class="avatar-container">
                 <img src="{{ url_for('static', filename='pfp.png') }}" alt="Avatar" class="avatar">
             </div>
             
-            <!-- Name with typing animation -->
             <h1 class="display-name" id="displayName">{{ user.display_name }}</h1>
             
-            <!-- User-State with better styling -->
             <div class="user-state">
                 {% if user.custom_emoji %}
                     {{ user.custom_emoji }}
                 {% endif %}
+                {% if user.custom_status %}
+                    {{ user.custom_status }}
+                {% endif %}
             </div>
             
-            <!-- Location with animation -->
             <div class="location">
                 <svg class="location-icon pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
@@ -101,14 +92,12 @@
                 <span>{{ user.location }}</span>
             </div>
 
-            <!-- Tech Stack -->
             <div class="tech-stack">
                 {% for lang in user.languages %}
                 <span class="tech-badge">{{ lang }}</span>
                 {% endfor %}
             </div>
             
-            <!-- Social Links -->
             <div class="social-links">
                 <a href="https://github.com/{{ user.github_username }}" target="_blank" class="social-link github-link">
                     <svg viewBox="0 0 24 24" fill="currentColor">
@@ -125,7 +114,6 @@
             </div>
         </div>
         
-        <!-- Enhanced Discord Status Card -->
         <div class="discord-card">
             <div class="discord-content">
                 <div class="discord-avatar-container">
@@ -135,26 +123,63 @@
                 <div class="discord-info">
                     <div class="discord-name-line">
                         <span class="discord-name">{{ user.username }}</span>
+                        {% if user.guild and user.guild.tag %}
+                        <div class="clan-badge" title="Clan: {{ user.guild.tag }}">
+                            {% if user.guild.badge %}
+                            <img src="https://cdn.discordapp.com/guild-achievements/{{ user.guild.identity_guild_id }}/{{ user.guild.badge }}.png" 
+                                 alt="{{ user.guild.tag }}" class="clan-icon">
+                            {% endif %}
+                            <span class="clan-tag">{{ user.guild.tag }}</span>
+                        </div>
+                        {% endif %}
                         <div class="discord-badges">
-                            <!-- Real Discord Badges -->
-                            <div class="badge nitro" title="Discord Nitro">
+                            <!-- Real Discord Badges based on public_flags -->
+                            {% if user.public_flags and user.public_flags or 64 %}
+                            <div class="badge house-bravery" title="HypeSquad Bravery">
                                 <svg viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                 </svg>
                             </div>
-                            <div class="badge early-supporter" title="Early Supporter">
+                            {% endif %}
+                            {% if user.listening_to_spotify %}
+                            <div class="badge spotify" title="Listening to Spotify">
                                 <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                    <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.563.387-.857.207-2.35-1.434-5.305-1.76-8.786-.963-.335.077-.67-.133-.746-.469-.077-.336.132-.67.469-.746 3.809-.871 7.077-.496 9.713 1.115.294.18.386.563.207.856zm1.223-2.723c-.226.367-.706.482-1.073.257-2.687-1.652-6.785-2.131-9.965-1.166-.413.125-.849-.104-.973-.517-.125-.413.104-.849.517-.973 3.632-1.102 8.147-.568 11.234 1.328.366.226.482.706.26 1.071zm.105-2.835C14.692 8.95 9.375 8.775 6.297 9.71c-.493.15-1.016-.128-1.166-.62-.149-.493.129-1.016.621-1.166 3.532-1.073 9.404-.865 13.115 1.338.445.264.590.837.327 1.282-.264.444-.838.590-1.282.326z"/>
                                 </svg>
                             </div>
-                            <div class="badge active-developer" title="Active Developer">
+                            {% endif %}
+                            {% if user.active_platforms.desktop %}
+                            <div class="badge desktop" title="Active on Desktop">
                                 <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>
+                                    <path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H3V4h18v10z"/>
                                 </svg>
                             </div>
+                            {% endif %}
                         </div>
                     </div>
-                    {% if user.activity != "No activity" %}
+                    {% if user.listening_to_spotify and user.spotify %}
+                    <div class="discord-activity spotify-activity">
+                        <div class="spotify-info">
+                            {% if user.spotify.album_art_url %}
+                            <img src="{{ user.spotify.album_art_url }}" alt="Album Art" class="spotify-album-art">
+                            {% endif %}
+                            <div class="spotify-text">
+                                <div class="spotify-song">🎵 {{ user.spotify.song }}</div>
+                                <div class="spotify-artist">by {{ user.spotify.artist }}</div>
+                                {% if user.spotify.album %}
+                                <div class="spotify-album">on {{ user.spotify.album }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% if user.spotify.timestamps %}
+                        <div class="spotify-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="spotifyProgress"></div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% elif user.activity != "No activity" %}
                     <div class="discord-activity">
                         <div class="activity-dot"></div>
                         <span>{{ user.activity }}</span>
@@ -172,7 +197,6 @@
         </div>
     </div>
 
-    <!-- Toast Notification -->
     <div id="toast" class="toast">
         <svg viewBox="0 0 24 24" fill="currentColor">
             <path d="M20 6L9 17l-5-5"/>
@@ -180,7 +204,6 @@
         <span id="toastMessage">Copied to clipboard!</span>
     </div>
 
-    <!-- Footer -->
     <div class="footer">
         <span>Made with ❤️ by {{ user.username }}</span>
     </div>
@@ -207,7 +230,6 @@
                 preview.style.display = 'none';
             }, 800);
 
-            // Start typing animation
             setTimeout(() => {
                 typeWriterEffect();
             }, 1000);
@@ -256,7 +278,6 @@
         }
 
         function openDiscordProfile() {
-            // Since Discord doesn't have public profile URLs, we'll copy the username
             copyDiscord();
         }
 
@@ -271,7 +292,28 @@
             }, 3000);
         }
 
-        // Add some hover effects
+        function updateSpotifyProgress() {
+            {% if user.listening_to_spotify and user.spotify and user.spotify.timestamps %}
+            const startTime = {{ user.spotify.timestamps.start }};
+            const endTime = {{ user.spotify.timestamps.end }};
+            const currentTime = Date.now();
+            
+            if (currentTime >= startTime && currentTime <= endTime) {
+                const totalDuration = endTime - startTime;
+                const elapsed = currentTime - startTime;
+                const progress = (elapsed / totalDuration) * 100;
+                
+                const progressFill = document.getElementById('spotifyProgress');
+                if (progressFill) {
+                    progressFill.style.width = Math.min(progress, 100) + '%';
+                }
+            }
+            {% endif %}
+        }
+
+        setInterval(updateSpotifyProgress, 1000);
+        updateSpotifyProgress();
+
         document.querySelectorAll('.tech-badge').forEach(badge => {
             badge.addEventListener('mouseenter', () => {
                 badge.style.transform = 'translateY(-2px) scale(1.05)';
@@ -281,7 +323,6 @@
             });
         });
 
-        // Easter egg - Konami code
         let konamiCode = [];
         const konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
         

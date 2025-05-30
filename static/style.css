@@ -785,6 +785,135 @@ body {
     }
 }
 
+.clan-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(88, 101, 242, 0.2);
+    border: 1px solid rgba(88, 101, 242, 0.3);
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.clan-icon {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+.clan-tag {
+    letter-spacing: 0.5px;
+}
+
+.badge.house-bravery {
+    background: linear-gradient(135deg, #9c84ef, #8a73d6);
+    box-shadow: 0 0 12px rgba(156, 132, 239, 0.4);
+}
+
+.badge.spotify {
+    background: linear-gradient(135deg, #1db954, #1ed760);
+    box-shadow: 0 0 12px rgba(29, 185, 84, 0.4);
+}
+
+.badge.desktop {
+    background: linear-gradient(135deg, #7289da, #5865f2);
+    box-shadow: 0 0 12px rgba(88, 101, 242, 0.4);
+}
+
+.spotify-activity {
+    background: rgba(29, 185, 84, 0.1);
+    border: 1px solid rgba(29, 185, 84, 0.2);
+    border-radius: 8px;
+    padding: 8px;
+    margin-top: 8px;
+}
+
+.spotify-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.spotify-album-art {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.spotify-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.spotify-song {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.spotify-artist, .spotify-album {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.6);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+ .spotify-progress {
+    margin-top: 6px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1db954, #1ed760);
+    border-radius: 2px;
+    transition: width 1s linear;
+    width: 0%;
+}
+
+.discord-name-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+    .spotify-info {
+        gap: 6px;
+    }
+    
+    .spotify-album-art {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .clan-badge {
+        font-size: 9px;
+        padding: 1px 4px;
+    }
+    
+    .clan-icon {
+        width: 10px;
+        height: 10px;
+    }
+}
+
 /* Improved dark mode */
 @media (prefers-color-scheme: dark) {
     .tech-badge {
